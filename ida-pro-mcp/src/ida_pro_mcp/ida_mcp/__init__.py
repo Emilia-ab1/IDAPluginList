@@ -6,9 +6,8 @@ enabling AI assistants to interact with IDA's disassembler and decompiler.
 Architecture:
 - rpc.py: JSON-RPC infrastructure and registry
 - mcp.py: MCP protocol server (HTTP/SSE)
-- sync.py: IDA synchronization decorators (@idasync)
+- sync.py: IDA synchronization decorator (@idasync)
 - utils.py: Shared helpers and TypedDict definitions
-- tests.py: Test framework (@test decorator, run_tests)
 - api_*.py: Modular API implementations (71 tools + 24 resources)
 """
 
@@ -16,9 +15,8 @@ Architecture:
 from . import rpc
 from . import sync
 from . import utils
-from . import tests
 
-# Import all API modules to register @tool functions, @resource functions, and @test functions
+# Import all API modules to register @tool functions and @resource functions
 from . import api_core
 from . import api_analysis
 from . import api_memory
@@ -30,17 +28,16 @@ from . import api_python
 from . import api_resources
 
 # Re-export key components for external use
-from .sync import idasync, IDAError, IDASyncError
+from .sync import idasync, IDAError, IDASyncError, CancelledError
 from .rpc import MCP_SERVER, MCP_UNSAFE, tool, unsafe, resource
-from .tests import run_tests, test, set_sample_size, get_sample_size
 from .http import IdaMcpHttpRequestHandler
+from .api_core import init_caches
 
 __all__ = [
     # Infrastructure modules
     "rpc",
     "sync",
     "utils",
-    "tests",
     # API modules
     "api_core",
     "api_analysis",
@@ -55,14 +52,12 @@ __all__ = [
     "idasync",
     "IDAError",
     "IDASyncError",
+    "CancelledError",
     "MCP_SERVER",
     "MCP_UNSAFE",
     "tool",
     "unsafe",
     "resource",
-    "run_tests",
-    "test",
-    "set_sample_size",
-    "get_sample_size",
     "IdaMcpHttpRequestHandler",
+    "init_caches",
 ]
