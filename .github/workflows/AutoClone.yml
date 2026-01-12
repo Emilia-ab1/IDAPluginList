@@ -18,9 +18,6 @@ jobs:
 
       - name: Extract and Update IDA Plugins
         run: |
-          #!/bin/bash
-          set -e
-          
           # 配置Git
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -28,80 +25,51 @@ jobs:
           
           # 从README中提取所有GitHub链接
           echo "📖 Extracting GitHub repositories from README.md..."
-          repos=$(grep -oP 'https://github\.com/[^)]+' README.md | sort -u)
+          repos=$(grep -oE 'https://github\.com/[^)]+' README.md | sort -u)
           
-          updated_count=0
-          cloned_count=0
-          failed_count=0
-          failed_repos=""
+          updated=0
+          cloned=0
+          failed=0
           
-          # 处理每个仓库
           for repo_url in $repos; do
-            # 提取仓库名（最后一部分）
             repo_name=$(basename "$repo_url")
-            
             echo ""
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             
             if [ -d "$repo_name" ]; then
-              # 已存在的仓库，执行增量更新
               echo "🔄 Updating: $repo_name"
-              cd "$repo_name"
-              
-              if git pull origin HEAD 2>/dev/null; then
-                echo "✅ Updated successfully: $repo_name"
-                ((updated_count++))
-              else
-                echo "⚠️  Update failed, trying fresh clone: $repo_name"
-                cd ..
-                rm -rf "$repo_name"
-                if git clone "$repo_url" 2>/dev/null; then
-                  rm -rf "$repo_name/.git"
-                  echo "✅ Fresh clone successful: $repo_name"
-                  ((cloned_count++))
-                else
-                  echo "❌ Failed: $repo_name"
-                  ((failed_count++))
-                  failed_repos="$failed_repos\n  - $repo_name ($repo_url)"
-                fi
-              fi
-              cd ..
-            else
-              # 新仓库，执行clone
-              echo "📥 Cloning new: $repo_name"
-              if git clone "$repo_url" 2>/dev/null; then
+              rm -rf "$repo_name"
+              if git clone "$repo_url" 2>&1; then
                 rm -rf "$repo_name/.git"
-                echo "✅ Cloned successfully: $repo_name"
-                ((cloned_count++))
+                echo "✅ Updated: $repo_name"
+                updated=$((updated + 1))
               else
-                echo "❌ Clone failed: $repo_name"
-                ((failed_count++))
-                failed_repos="$failed_repos\n  - $repo_name ($repo_url)"
+                echo "❌ Failed: $repo_name"
+                failed=$((failed + 1))
+              fi
+            else
+              echo "📥 Cloning: $repo_name"
+              if git clone "$repo_url" 2>&1; then
+                rm -rf "$repo_name/.git"
+                echo "✅ Cloned: $repo_name"
+                cloned=$((cloned + 1))
+              else
+                echo "❌ Failed: $repo_name"
+                failed=$((failed + 1))
               fi
             fi
           done
           
-          # 打印统计信息
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "📊 Summary:"
-          echo "  🔄 Updated: $updated_count"
-          echo "  📥 Cloned: $cloned_count"
-          echo "  ❌ Failed: $failed_count"
-          
-          if [ $failed_count -gt 0 ]; then
-            echo ""
-            echo "Failed repositories:$failed_repos"
-          fi
+          echo "📊 Summary: Updated=$updated, Cloned=$cloned, Failed=$failed"
           
           # 提交更改
           git add .
           if git diff --staged --quiet; then
-            echo ""
             echo "✨ No changes to commit"
           else
-            git commit -m "chore: Auto update IDA plugins (Updated: $updated_count, Cloned: $cloned_count, Failed: $failed_count)"
+            git commit -m "chore: Auto update IDA plugins (Updated: $updated, Cloned: $cloned, Failed: $failed)"
             git push origin main
-            echo ""
-            echo "✅ Changes committed and pushed successfully"
+            echo "✅ Changes pushed successfully"
           fi
