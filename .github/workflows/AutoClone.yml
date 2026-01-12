@@ -100,17 +100,7 @@ jobs:
             echo ""
             echo "✨ No changes to commit"
           else
-            commit_msg="chore: Auto update IDA plugins
-
-📊 Statistics:
-- Updated: $updated_count repositories
-- Cloned: $cloned_count new repositories
-- Failed: $failed_count repositories
-
-🤖 Automated by GitHub Actions
-📅 $(date '+%Y-%m-%d %H:%M:%S UTC')"
-            
-            git commit -m "$commit_msg"
+            git commit -m "chore: Auto update IDA plugins (Updated: $updated_count, Cloned: $cloned_count, Failed: $failed_count)"
             git push origin main
             echo ""
             echo "✅ Changes committed and pushed successfully"
