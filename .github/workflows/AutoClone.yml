@@ -3,39 +3,115 @@ name: AutoClone
 on: 
   schedule:
     - cron: '0 1 * * *'
+  workflow_dispatch:
 
 jobs:
   AutoClone:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: main
           persist-credentials: false
 
-      - name: AutoClone
+      - name: Extract and Update IDA Plugins
         run: |
-          pl=(https://github.com/mrexodia/ida-pro-mcp https://github.com/Accenture/VulFi https://github.com/REhints/HexRaysCodeXplorer https://github.com/a1ext/auto_re https://github.com/polymorf/findcrypt-yara https://github.com/gaasedelen/patching https://github.com/keystone-engine/keypatch https://github.com/herosi/CTO https://github.com/aliyunav/Finger https://github.com/L4ys/LazyIDA https://github.com/P4nda0s/IDABeautify https://github.com/SentineLabs/AlphaGolang https://github.com/sibears/IDAGolangHelper https://github.com/sonyps5201314/pdb https://github.com/JusticeRage/Gepetto https://github.com/harlamism/IdaClu https://github.com/thalium/symless https://github.com/airbus-cert/Yagi https://github.com/cseagle/blc https://github.com/gh0stkey/FuncExporter)
-          # 设置Git
-          git config --local user.name "AnonymousUser"
-          git config --local user.email "you@example.com"
+          #!/bin/bash
+          set -e
+          
+          # 配置Git
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://${{ github.actor }}:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}
-          # 循环Clone
-          for i in ${pl[*]}; do
-            OLD_IFS="$IFS"
-            IFS="/" 
-            arr=($i)
-            IFS="$OLD_IFS"
-            key=`expr ${#arr[@]} - 1`
-            dir=${arr[$key]}
-            echo $dir
-            rm -rf $dir
-            git clone $i
-            rm -rf $dir/.git/
+          
+          # 从README中提取所有GitHub链接
+          echo "📖 Extracting GitHub repositories from README.md..."
+          repos=$(grep -oP 'https://github\.com/[^)]+' README.md | sort -u)
+          
+          updated_count=0
+          cloned_count=0
+          failed_count=0
+          failed_repos=""
+          
+          # 处理每个仓库
+          for repo_url in $repos; do
+            # 提取仓库名（最后一部分）
+            repo_name=$(basename "$repo_url")
+            
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            
+            if [ -d "$repo_name" ]; then
+              # 已存在的仓库，执行增量更新
+              echo "🔄 Updating: $repo_name"
+              cd "$repo_name"
+              
+              if git pull origin HEAD 2>/dev/null; then
+                echo "✅ Updated successfully: $repo_name"
+                ((updated_count++))
+              else
+                echo "⚠️  Update failed, trying fresh clone: $repo_name"
+                cd ..
+                rm -rf "$repo_name"
+                if git clone "$repo_url" 2>/dev/null; then
+                  rm -rf "$repo_name/.git"
+                  echo "✅ Fresh clone successful: $repo_name"
+                  ((cloned_count++))
+                else
+                  echo "❌ Failed: $repo_name"
+                  ((failed_count++))
+                  failed_repos="$failed_repos\n  - $repo_name ($repo_url)"
+                fi
+              fi
+              cd ..
+            else
+              # 新仓库，执行clone
+              echo "📥 Cloning new: $repo_name"
+              if git clone "$repo_url" 2>/dev/null; then
+                rm -rf "$repo_name/.git"
+                echo "✅ Cloned successfully: $repo_name"
+                ((cloned_count++))
+              else
+                echo "❌ Clone failed: $repo_name"
+                ((failed_count++))
+                failed_repos="$failed_repos\n  - $repo_name ($repo_url)"
+              fi
+            fi
           done
-          # 添加
+          
+          # 打印统计信息
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 Summary:"
+          echo "  🔄 Updated: $updated_count"
+          echo "  📥 Cloned: $cloned_count"
+          echo "  ❌ Failed: $failed_count"
+          
+          if [ $failed_count -gt 0 ]; then
+            echo ""
+            echo "Failed repositories:$failed_repos"
+          fi
+          
+          # 提交更改
           git add .
-          git commit -am "Update"
-          git push origin main
+          if git diff --staged --quiet; then
+            echo ""
+            echo "✨ No changes to commit"
+          else
+            commit_msg="chore: Auto update IDA plugins
+
+📊 Statistics:
+- Updated: $updated_count repositories
+- Cloned: $cloned_count new repositories
+- Failed: $failed_count repositories
+
+🤖 Automated by GitHub Actions
+📅 $(date '+%Y-%m-%d %H:%M:%S UTC')"
+            
+            git commit -m "$commit_msg"
+            git push origin main
+            echo ""
+            echo "✅ Changes committed and pushed successfully"
+          fi

@@ -1,4 +1,4 @@
-# **[IDAPluginList](https://github.com/HACK-THE-WORLD/IDAPluginList)**
+# IDAPluginList
 
 IDA插件集合，含项目名称及项目地址。
 
