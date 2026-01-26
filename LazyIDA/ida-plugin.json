@@ -6,11 +6,10 @@
     "entryPoint": "LazyIDA.py",
     "description": "Make your IDA Lazy!",
     "idaVersions": ">=7.4",
-    "platforms": ["windows-x86_64", "linux-x86_64", "macos-x86_64", "macos-arm64"],
+    "platforms": ["windows-x86_64", "linux-x86_64", "macos-x86_64", "macos-aarch64"],
     "license": "MIT",
     "categories": ["api-scripting-and-automation"],
     "keywords": ["automation", "clipboard", "shortcuts", "vtable", "format-string"],
-    "logoPath": "logo.png",
     "urls": {
       "repository": "https://github.com/L4ys/LazyIDA"
     },
