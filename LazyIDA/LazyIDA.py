@@ -606,7 +606,7 @@ class LazyIDA_t(idaapi.plugin_t):
             addon.name = "LazyIDA"
             addon.producer = "Lays"
             addon.url = "https://github.com/L4ys/LazyIDA"
-            addon.version = "1.1.0.0"
+            addon.version = "1.1.0"
             idaapi.register_addon(addon)
 
             hx_actions = (
