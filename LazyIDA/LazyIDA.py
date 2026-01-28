@@ -2,25 +2,18 @@ from __future__ import division
 from __future__ import print_function
 from struct import unpack
 
-# this plugin requires IDA 7.4 or newer
-try:
-    import idaapi
-    import idautils
-    import idc
-    import ida_pro
-    SUPPORTED_IDA = ida_pro.IDA_SDK_VERSION >= 740
+import idaapi
+import idautils
+import idc
+import ida_pro
 
+if idaapi.is_idaq():
     if ida_pro.IDA_SDK_VERSION >= 920:
         from PySide6.QtWidgets import QApplication
     else:
         from PyQt5.Qt import QApplication
-except Exception as e:
-    print(e)
-    SUPPORTED_IDA = False
 
-# is this deemed to be a compatible environment for the plugin to load?
-if not SUPPORTED_IDA:
-    print("LazyIDA plugin is not compatible with this IDA version")
+PLUGIN_VERSION = "1.1.1"
 
 ACTION_CONVERT = ["lazyida:convert%d" % i for i in range(10)]
 ACTION_SCANVUL = "lazyida:scanvul"
@@ -562,7 +555,7 @@ class LazyIDA_t(idaapi.plugin_t):
             else:
                 BITS = 16
 
-        print("LazyIDA (v1.1.0.0) plugin has been loaded.")
+        print(f"LazyIDA ({PLUGIN_VERSION}) plugin has been loaded.")
 
         # Register menu actions
         menu_actions = (
@@ -606,7 +599,7 @@ class LazyIDA_t(idaapi.plugin_t):
             addon.name = "LazyIDA"
             addon.producer = "Lays"
             addon.url = "https://github.com/L4ys/LazyIDA"
-            addon.version = "1.1.0"
+            addon.version = PLUGIN_VERSION
             idaapi.register_addon(addon)
 
             hx_actions = (
