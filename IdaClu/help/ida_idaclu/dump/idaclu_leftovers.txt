@@ -1,0 +1,864 @@
+func_gen=None, env_desc=None, plug_params=None
+folders=None, prefixes=None, colors=None, env_desc=None, progress_callback=None
+
+
+stack = []
+def has_func_recursion(func_addr):
+    global stack
+    if func_addr in stack:
+        # print "This is recursive function", hex(func_addr), Name(func_addr)
+        # for x in stack:
+        #     print "\t", hex(x)
+        # #insert your renaming here, it should be idc.MakeName
+        return
+
+    stack.append(func_addr)
+    for h in idautils.FuncItems(func_addr):
+        for r in idautils.XrefsFrom(h, 0):
+            if r.type == idaapi.fl_CF or r.type == idaapi.fl_CN:
+                # print hex(h), "-->", hex(r.to)
+                if r.to == func_addr:
+                    # Insert renaming here too for simple recursion
+                    # print "It is simple recursive function that calls itself directly"
+                    return
+                else:
+                    has_func_recursion(r.to)
+    stack = stack[:-1]
+
+
+# --
+
+            # void __thiscall boost::exception::~exception(boost::exception *this)
+            # void __thiscall boost::exception::~exception(boost::exception *this)
+            # bool __thiscall Concurrency::details::stl_critical_section_concrt::try_lock_for(Concurrency::details::stl_critical_section_concrt *__hidden this, unsigned int)
+            # int __stdcall __std_parallel_algorithms_hw_threads
+            # ??1exception@boost@@MAE@XZ_0
+            # ??1exception@boost@@MAE@XZ_1
+            # ??1exception@boost@@MAE@XZ_2
+            # ??1exception@boost@@MAE@XZ_3
+
+# 41E2C0: can't rename byte as 'sub_41E2C0' because the name has a reserved prefix.
+
+
+            # interested in sub_,nullsub_ functions
+            # DEBUG
+            #
+
+            # if not any(func_name.startswith(x) for x in ['sub_', 'nullsub_', 'lib_explicit', 'lib_implicit', 'j_lib_explicit', 'j_lib_implicit']):
+            #     if func_name not in ['CompareFunction', 'EditPrint', 'RunEngine', '@_guard_check_icall_nop@4', 'j_j_@_guard_check_icall_nop@4', 'j_@_guard_check_icall_nop@4', 'j_@_guard_check_icall_nop@4_0', 'CreateScriptInterfaces', 'CreateScriptEngine', 'UserMathErrorFunction', 'Create', 'pDSEnumCallback', 'StartAddress', 'CreateProjectIf', 'NotifyDestroy', 'CreateD3DDll', 'Direct3DCreate8', 'DirectInput8Create', 'DirectSoundEnumerateA', 'XInputGetState', 'SHGetKnownFolderPath', 'GdipAlloc']:
+            #         print(func_name)
+            #         exit()
+
+
+            # func_name.startswith('??') or  # ??1exception@boost@@MAE@XZ
+            # func_name.startswith('@_') or  # @_guard_check_icall_nop@4
+
+
+## --
+
+                if opnd_type == idaapi.o_void:  # t = idc.get_operand_type(head, i)  # t = idc.GetOpType(head, i)
+                    # opnd_str = idaapi.tag_remove(idaapi.print_operand(opnd, idaapi.PRTYPE_MULTI | idaapi.PRTYPE_NOSHOW))
+
+
+  # , string_ea.length, idc.ASCSTR_C
+        # IDA v6: AttributeError: 'StringItem' object has no attribute 'strtype'
+
+        # str_dec = idc.GetString(string_ea.ea, string_ea.length, strtype=idc.ASCSTR_UNICODE)  # idc.ASCSTR_C
+        # strtype=idc.ASCSTR_UNICODE
+        # ida_bytes.get_ascii_contents
+        # Find xrefs (cross-references) to the current string
+
+
+                # ida_shims.start_ea(func_desc)
+                # func_addr = ida_shims.get_func_attr(xref_addr, idc.FUNCATTR_START)
+
+
+# def get_data(progress_callback):
+#     return {'50': [{'func_name': 'a', 'func_size': 'b', 'func_addr': 'c', 'func_mark': 'd'}]}
+
+            # name = get_name(ea, ida_name.GN_VISIBLE)
+
+
+
+# https://hex-rays.com/downloads/igor-tip-of-the-week-S01.pdf
+
+
+  # os.path.dirname(os.path.abspath(" ".join(sys.argv)))
+  
+  
+          # script_origin = os.path.dirname(os.path.abspath(sys.argv[0]))
+        plugin_dirs = ida_shims.get_ida_subdirs('plugins')
+		
+		
+def getIter(some_object):
+    try:
+        some_object_iterator = iter(some_object)
+    except TypeError as te:
+        return True
+    finally:
+        return False
+		
+		
+        # https://stackoverflow.com/questions/52637147/python-qt-change-the-background-color-of-a-button-not-just-border
+        # https://stackoverflow.com/questions/21685414/qt5-setting-background-color-to-qpushbutton-and-qcheckbox
+		
+		
+
+# from PyQt5 import QtGui, QtCore, QtWidgets
+
+
+
+
+            # here data() method is not Node's and not Model's
+
+            # data = []
+            # for row_idx in rows:
+                # firstColumnIndex=index.sibling(row_idx, 1)
+                # va = firstColumnIndex.data()
+
+                # if va.startswith('0x'):
+                #     data.append(va)
+                    # jumpto(int(firstColumnIndex.data(), base=16))
+					
+					
+					
+					
+            # rows = [index.row() for index in self.ui.ResultsView.selectionModel().selectedRows()]
+			
+			
+			
+# --
+            # data = []
+            # for row_idx in rows:
+                # firstColumnIndex=index.sibling(row_idx, 1)
+                # va = firstColumnIndex.data()
+
+                # if va.startswith('0x'):
+                #     data.append(va)
+                    # jumpto(int(firstColumnIndex.data(), base=16))
+					
+					
+# --
+    def get_plugin_data(self):  # , cat, plg
+        # layout = self.ui.ResultsLayout
+        # item = layout.takeAt(0)
+        # if item:
+        #     widget = item.widget()
+        #     if widget:
+        #         widget.deleteLater()
+        #     del item
+        #
+        # self.progressBar = qt_shims.get_QProgressBar()()
+        # self.progressBar.setGeometry(qt_shims.get_QRect()(20, 10, 361, 23))
+        # self.progressBar.setProperty("value", 24)
+        # self.progressBar.setObjectName("progressBar")
+        # self.progressBar.minimum = 1
+        # self.progressBar.maximum = 100
+        # self.ui.ResultsLayout.addWidget(self.progressBar)
+		
+		
+# --
+
+        # self.swap_button = QtWidgets.QPushButton("Swap Position")
+        # sidebar_scroll_content_layout.addWidget(self.swap_button)
+        # self.ui.swap_button.clicked.connect(self.swap_position)
+        # self.swap_position()
+		
+# --
+        seed_data = {'col1': ['1', '2', '3', '4', '5', '6'],
+                'col2': ['7', '8', '9', '10', '11', '12'],
+                'col3': ['13', '14', '15', '16', '17', '18']}
+				
+        # self.ui.ResultsView.load_data(seed_data['col1'])
+		
+		
+# --
+        # line = QtWidgets.QFrame()
+        # line.setObjectName(u"line")
+        # # line.setGeometry(QtCore.QRect(10, 80, 201, 16))
+        # line.setFrameShape(QtWidgets.QFrame.HLine)
+        # line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        # sidebar_scroll_content_layout.addWidget(line)
+
+        # self.ui.ResultsView.setModel(QtGui.QStandardItemModel())
+        # self.ui.ResultsView.model().setHorizontalHeaderLabels(["VA", "Size", "Chunks", 'Name'])
+		
+# --
+        # self.ui.ResultsView.setParent(None)
+        # self.progressBar = qt_shims.get_QProgressBar()()
+        # self.progressBar.setGeometry(qt_shims.get_QRect()(20, 10, 361, 23))
+        # self.progressBar.setProperty("value", 24)
+        # self.progressBar.setObjectName("progressBar")
+        # self.progressBar.minimum = 1
+        # self.progressBar.maximum = 100
+        # self.progressBar.setTextVisible(False)
+        # self.ui.ContentLayout.addWidget(self.progressBar)
+		
+		
+# --
+# def importpath(path):
+#     print('LLL: ', path)
+#     strpath = str(path)
+#     if not strpath.startswith("/"):
+#         # Py2: parent_path = os.path.dirname(os.path.abspath(sys._getframe().f_globals.get("__file__", ".")))
+#         # Py3:
+#         parent_path = Path(sys._getframe().f_globals.get("__file__", ".")).parent
+#         path = parent_path # path
+#     else:
+#         # Py2: path = path
+#         # Py3:
+#         path = Path(path)
+#     # try:
+#     # according to this method modules get loaded from first path found
+#     # pop does not clear it under the hood, only from the list
+#     # Py2: parent_path_str = os.path.abspath(os.path.join(path, os.pardir))
+#     # Py3:
+#     parent_path_str = path.parent
+#     sys.path.append( str(parent_path_str))  # insert 0,
+#     # print("search scope: " + "\n".join(sys.path))
+#     print("BBB: ", path)
+#     module = __import__(get_stem(path))  # path.stem
+#     # finally:
+#     sys.path.pop() # 0
+#         # print("finally: ", path.parent)
+#         # print("finally: ", path.stem)
+#     print(module)
+#     return module
+
+# --
+        # for row in sdata:
+        #     sitems = [QtGui.QStandardItem(str(item)) for item in row]
+        # return sitems
+        # .ui.ResultsView.model().appendRow()
+        # ignore what's above for now
+        # print(json.dumps(sdata, indent=4))  # !!
+		
+# --
+        # Set some random data:
+        # for i in 'abc':
+        #     self.items.append(ResultNode(i))
+        #     self.items[-1].addChild(ResultNode(['d', 'e', 'f']))
+        #     self.items[-1].addChild(ResultNode(['g', 'h', 'i']))
+
+        # sorting
+		
+# --
+        self.items = []  # items is just a plain list, just a container
+                         # this container will be populated with independent parents
+                         # with their children
+                         # later on this container will be fed to the custom ResultModel model
+						 
+						 
+# --
+                    # module = import_module(''+plg_fmt, package='.plugins')  # os.path.join(root_folder, cat, plg)
+					
+# --
+# from pathlib import Path # Py3
+
+# --
+# graph_down()
+# from ida_prefix
+
+
+# --
+        # self.ui.ResultsView.model().setHeaderData(0, QtCore.Qt.Horizontal, "Custom Header 1", QtCore.Qt.DisplayRole)
+        # self.ui.ResultsView.model().setHeaderData(1, QtCore.Qt.Horizontal, "Custom Header 2", QtCore.Qt.DisplayRole)
+
+        # self.ui.ResultsView.model().setHorizontalHeaderLabels(["VA", "Size", "Chunks", 'Name'])
+        # for i in range(4):
+        #     self.ui.ResultsView.setHeader(i, QtCore.Qt.Horizontal, "Column " + str(i))
+        # self.ui.ResultsView.header().setDefaultAlignment(QtCore.Qt.AlignHCenter)
+		
+# --
+        # layout = self.ui.ResultsLayout  # progressBar
+        # item = layout.takeAt(0)
+        # if item:
+        #     widget = item.widget()
+        #     if widget:
+        #         widget.deleteLater()
+        #     del item
+        # self.ResultsView = qt_shims.get_QTreeView()()
+        # self.ResultsView.setObjectName(u"ResultsView")
+        # self.ui.ResultsLayout.addWidget(self.ResultsView)
+		
+# --
+def get_stem(filename):
+    base_name = os.path.basename(filename)
+    stem, _ = os.path.splitext(base_name)
+    return stem
+	
+#
+def importpath(path):
+    print()
+    print("import either cat or plg")
+    print("import target: " + path)
+	
+# --
+def importpath(path):
+    strpath = str(path)
+    if not strpath.startswith("/"):
+        # parent_path = os.path.dirname(os.path.abspath(__file__))
+        parent_path = os.path.dirname(os.path.abspath(path))
+
+        # parent_path = Path(sys._getframe().f_globals.get("__file__", ".")).parent  # relative to current script
+        # path = parent_path / path
+        # print('new1: ', parent_path)
+        # print('new2: ', path)
+        # new1:  C:\Program Files\IDA Pro 8.2\plugins\idaclu
+        # new2:  C:\Program Files\IDA Pro 8.2\plugins\idaclu\plugins\group_1
+    else:
+        parent_path = os.path.dirname(os.path.abspath(path))
+        # Py3: path = Path(path)
+    # try:
+    # according to this method modules get loaded from first path found
+    # pop does not clear it under the hood, only from the list
+    # Py3: sys.path.append( str(path.parent))  # insert 0,
+    sys.path.append(parent_path)
+    # print("search scope: " + "\n".join(sys.path))
+    module = __import__(os.path.basename(path))
+    # module = __import__(path.stem)
+    # finally:
+    sys.path.pop() # 0
+    # print("finally: ", path.parent)  # C:\Program Files\IDA Pro 8.2\plugins\idaclu\plugins
+    # print("finally: ", path.stem)    # group_5
+    print(module)
+    return module
+	
+# --
+class Worker(qt_shims.get_QThread()):
+
+    #This is the signal that will be emitted during the processing.
+    #By including int as an argument, it lets the signal know to expect
+    #an integer argument when emitting.
+    updateProgress = qt_shims.get_Signal()(int)
+
+    #You can do any extra things in this init you need, but for this example
+    #nothing else needs to be done expect call the super's init
+    def __init__(self):
+        qt_shims.get_QThread().__init__(self)
+
+    #A QThread is run by calling it's start() function, which calls this run()
+    #function in it's own "thread".
+    def run(self):
+        print('hit')
+        #Notice this is the same thing you were doing in your progress() function
+        for i in range(1, 101):
+            #Emit the signal so it can be received on the UI side.
+            self.updateProgress.emit(i)
+            time.sleep(0.01)
+			
+# --
+                # the problem is here
+                # however passed paths are different
+                # modules are got the same
+                # <module '__init__' from 'C:\\Users\\harlamovs.s\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\plugins\\idaclu\\plugins\\group_1\\__init__.py'>
+                # print(module)
+                # print('dbg: ' + agroup_name)
+
+                # print('## ', cat, agroup_name)
+				
+# --
+        # mydata = index.model().mydata
+        # if row >= len(mydata):
+        #     return
+        # # jump to function start if function-name column clicked, else to last match
+        # va = mydata[row].va if ResultModel.col_label == col else mydata[row].lastmatch
+        # if not va:
+        #     va = mydata[row].va
+        # findfunc.matcher_ida.gui_jump_to_va(va)
+		
+# --
+class IdaCluDialog(qt_shims.get_QWidget()):
+    def __init__(self, env_desc):
+        super(IdaCluDialog, self).__init__()
+        self.env_desc = env_desc
+        self.ui = Ui_PluginDialog()
+        self.ui.setupUi(self)
+
+        # self.resultmodel = ResultModel()
+		
+		
+# --
+
+        # func_dir: ida_dirtree.dirtree_t
+        # dir_entry: ida_dirtree.direntry_t
+		
+# --
+                    # eventually all button set is set to one click handler - the last one
+
+
+                    # plg_btn.clicked.connect(lambda: self.get_plugin_data(spg_ref, plg_fmt))  # lambda: ?? # self.shared_tree_view.load_data(seed_data['col2'])
+                    # lambda: self.ui.treeView.model().appendRow(sitems)
+					
+# --
+
+        # self.ui.scrollArea.setWidgetResizable(True)
+		
+# --
+        # remember that functions should be renamed in paralel
+        # in IDA and in Model
+
+        # func_dir: ida_dirtree.dirtree_t
+        # func_dir = ida_dirtree.get_std_dirtree(ida_dirtree.DIRTREE_FUNCS)  # DIRTREE_FUNCS = 3
+        # https://www.hex-rays.com/products/ida/support/idapython_docs/ida_dirtree.html#ida_dirtree.DIRTREE_FUNCS
+		
+# --
+            # for idx in indexes:
+            #     self.ui.ResultsView.edit(idx)
+			
+                # index.sibling(index.row(), 1).setData
+				
+# --
+
+
+get_folder_funcs
+traverse_subs
+
+# --
+
+  # populate at start and after each 'folder add/clear' operation
+  
+# --
+        # self.ui.PrefixSelect.setEnabled(True)  # won't help
+        # # self.ui.PrefixSelect.setEditable(True)
+        # pal = self.ui.PrefixSelect.palette()
+        # pal.setColor(QtGui.QPalette.Button, QtGui.QColor(255,255,255))
+        # self.ui.PrefixSelect.setPalette(pal)
+        # self.ui.PrefixSelect.addItem("-")
+		
+# --
+        # self.ui.ResultsView.model().clear()
+        # for row in seed_data:
+        #     items = [QtGui.QStandardItem(str(item)) for item in row]
+        #     self.ui.ResultsView.model().appendRow(items)
+		
+# --
+    def on_button_clicked(self):
+        sender_button = self.sender()
+        print('%s Clicked!' % str(sender_button.objectName()))
+		
+# --
+        col = index.column()
+        row = index.row()
+		
+# -- 
+        def mousePressEvent(self, event):
+        # self.emit(QtCore.SIGNAL('clicked()'))
+		
+# --
+        # self.ui.ResultsView.selectionModel().selectionChanged.connect(self.selection_changed)  # crash issue !
+        resultsViewSelModel = self.ui.ResultsView.selectionModel()
+        resultsViewSelModel.selectionChanged.connect(self.selection_changed)
+		
+# --
+        # for i in range(4):
+        #     self.setHeaderData(i, QtCore.Qt.Horizontal, "Column " + str(i))
+
+        # was essential
+        # qt_shims.get_QAbstractItemModel().__init__(self)
+        # self._root = ResultNode(None)  # !!
+        # root-root can be nominally empty, but it should exist for all parents
+        # yes, one single grandpartent for the all parents
+        rootData = [header for header in ("Title", "Description")]
+		
+# --
+
+
+        # self.resultmodel = ResultModel()
+		
+# --
+
+  # float is essential in Python2
+  
+# --
+
+        # print(get_func_attr(0x404F87, 36))
+		
+# --
+        print('%s Clicked!' % str(btn_name))
+		
+# --
+
+    def swapPosition(self):
+        # main_splitter = self.centralWidget()
+		
+# --
+
+        # Toggle the sidebar position flag
+        self.is_sidebar_on_left = not self.is_sidebar_on_left
+		
+# --
+            sdata = agroup(self.updatePb, self.env_desc, plug_params)  # post-filter
+            # self.folders, self.prefixes, self.colors, 
+			
+# --
+        module = None   # C:\Program Files\IDA Pro 8.2\plugins\group_1 !
+        >> print("TRACE: ", root_folder, 'idaclu', 'plugins', cat)
+        with plg_utils.PluginPath(os.path.join(root_folder, 'idaclu', 'plugins', cat)):
+            module = __import__(plg)
+            del sys.modules[plg]
+			
+# --
+
+        module = None   # C:\Program Files\IDA Pro 8.2\plugins\group_1 !
+        with plg_utils.PluginPath(os.path.join(root_folder, 'idaclu', 'plugins', cat)):
+		
+# --
+
+        root_folder = self.env_desc.plg_loc  # "C:\\Users\\harlamovs.s\\AppData\\Roaming\\Hex-Rays\\IDA Pro\\plugins\\idaclu\\plugins"
+        # print('root_folder: ', root_folder)
+        # print(os.path.join(root_folder, cat, plg))
+
+# --
+        print('%s Clicked!' % str(sender_button.objectName()))
+# --
+        # RIGHT PLACE
+        print('step #0', self.option_sender)
+        plug_params = {}
+# --
+            print('step #1', self.option_sender)
+            widget = self.ui.ScriptsArea.findChild(qt_shims.get_QPushButton(), self.option_sender)
+            print('step #2', widget)
+            parent_layout = widget.parent().layout()
+            print('step #3', parent_layout)
+# --
+            print("step prep: {}".format(parent_layout.count()))
+            for i in range(parent_layout.count()):
+
+                sub_item = parent_layout.itemAt(i)
+                print('step #4', i, sub_item)
+                if sub_item:
+                    if isinstance(sub_item, qt_shims.get_QSpacerItem()):
+                        parent_layout.removeItem(sub_item)
+                        print("SPACER REMOVED")
+                        continue
+                    sub_widget = sub_item.widget()
+                    print('step #8', i, sub_item, sub_widget)
+                    if sub_widget and (isinstance(sub_widget, qt_shims.get_QLineEdit())):
+                        print("TEXTEDIT REMOVED")
+                        parent_layout.removeWidget(sub_widget)
+						
+
+# --
+                self.option_sender = full_spec_name
+                print('step #5', self.option_sender)
+                return
+# --
+
+        # RIGHT PLACE
+
+
+        # module = import_path(os.path.join(root_folder, cat, plg))
+        agroup = getattr(module, 'get_data')
+# --
+        for dt in sdatt:
+            # print("dt-type: ", type(dt))  # could be - dt <type 'unicode'>
+            # print(disp_dt, dt)
+            self.items.append(ResultNode("{} ({})".format(dt, len(sdatt[dt]))))
+            # print('dt## ',dt)
+            for (idx, tt) in sdatt[dt]:
+                # print('tt## ', tt['func_size'])
+                # print(list(tt.values()))
+                self.items[-1].addChild(ResultNode(list(tt.values())))  # [tt['func_name'], tt['func_addr'], tt['func_size']]
+                global_index += 1
+                finished = 80 + int(15 * (global_index / float(overall_count)))
+                self.ui.worker.updateProgress.emit(finished)
+# --
+
+***IdaClu*** won the ***1st*** place in the ***HexRays IDA Pro Plugin Contest 2023***!
+
+# --
+        # remember that functions should be renamed in paralel
+        # in IDA and in Model
+# --
+            # rows = [index.row() for index in self.ui.ResultsView.selectionModel().selectedRows()]
+# --
+                        new_name = "_".join(old_name.split('_')[1:])
+                        if new_name.startswith('sub_'):
+# --
+# https://pastebin.com/5Tt48NJJ
+# https://github.com/alexander-hanel/idapython6to7
+    # %APPDATA%\Hex-Rays\IDA Pro\plugins
+    # $HOME/.idapro/plugins
+	
+# --
+        # print(plugin_args, len(plugin_args))
+        elif self.option_sender == None and len(plugin_args) > 0:
+# --
+                    text_edit.setMaximumSize(qt_shims.get_QSize()(16777215, 30))
+                    # text_edit.setMinimumSize(qt_shims.get_QSize()(16777215, 30))
+                    parent_widget.layout().addWidget(text_edit)
+# --
+                    text_edit.setObjectName("{}__{}".format(full_spec_name, ph))
+                    # parent_widget.layout().insertWidget(0, text_edit)
+                spacer = qt_shims.get_QSpacerItem()(20, 30, qt_shims.get_QSizePolicy().Fixed, qt_shims.get_QSizePolicy().MinimumExpanding)
+                # parent_widget.layout().addSpacerItem(spacer)  # addItem
+                parent_widget.layout().addStretch(1)
+
+# --
+    def showContextMenu(self, point):
+        ix = self.ui.ResultsView.indexAt(point)
+        if ix.column() == 0:
+            menu = qt_shims.get_QMenu()()
+            menu.addAction(qt_shims.get_QIcon()(':/idaclu/puzzle-piece.png'), "Rename")
+            action = menu.exec_(self.ui.ResultsView.mapToGlobal(point))
+            if action:
+                if action.text() == "Rename":
+                    self.ui.ResultsView.edit(ix)
+                    print("xx:", self.ui.ResultsView.model().data(ix))
+                    #ida_shims.get_name_ea()
+                    # ida_shims.set_name(va, new_name, idaapi.SN_CHECK)
+# --
+    # custom method to pathch value in certain column
+    # of a given node/row
+    # this is not matrix notation, since row is known beforehead - it is "this"
+    # column is not known
+    def setData(self, column, value):
+        if column < 0 or column >= len(self._data):
+            return False
+        self._data[column] = value
+        print('v:', self._data[column])
+        return True
+
+
+# --
+    # the only method that alters all relative related fields
+    # note that "child" argument here is also of TypeResultNode
+    # thats why child.columnCount() call is possible
+    #
+    def addChild(self, child):
+# --
+    # row? but it is initially zero..
+    def row(self):
+# --
+    def addChild(self, child):
+        child._parent = self
+        child._row = len(self._children)  # so starts at zero
+# --
+# from PyQt5 import QtCore, QtGui
+# from PyQt5.QtCore import Qt, QAbstractItemModel
+# from PyQt5.QtGui import QColor
+# from PyQt5.QtWidgets import QMessageBox
+# import qt_shims  # not found for some reason
+from . import qt_shims
+# --
+# https://gist.github.com/danieljfarrell/6e94aa6f8c3c437d901fd15b7b931afb
+# set of methods to work with a single node/row
+# --
+    # retrieve value of row/node at certain column
+    def data(self, column):
+        if column >= 0 and column < len(self._data):
+            return self._data[column]
+# --
+class ResultNode(object):
+    def __init__(self, data):
+        self._data = data
+        if type(data) == tuple:
+            self._data = list(data)
+        if type(data) is str or not hasattr(data, '__getitem__'):
+            self._data = [data]
+        # compound data types tuple/list wil be eventually converted to list
+
+        # when new node/row is created
+        # there is no information about its relatives
+        self._columncount = len(self._data)
+        self._children = []
+        self._parent = None
+        self._row = 0
+# --
+    # columnt count, but not in model, but rather in this single node/row
+    def columnCount(self):
+        return self._columncount
+# --
+    # children count? where are they populated in?
+    def childCount(self):
+        return len(self._children)
+# --
+    # node maintains his own children positioning system
+    # it can be 0 for each node/row, and denotes the first child
+    # it can be equal childCount-1
+    # this index must be specified as an argument
+    # so as major-row/node maintains its own list of rows/nodes
+    def child(self, row):
+        if row >= 0 and row < self.childCount():
+            return self._children[row]
+# --
+    # parent? how to obtain one?
+    def parent(self):
+        return self._parent
+# --
+    # custom method to pathch value in certain column
+    # of a given node/row
+    # this is not matrix notation, since row is known beforehead - it is "this"
+    # column is not known
+    def setData(self, column, value):
+        if column < 0 or column >= len(self._data):
+            return False
+        self._data[column] = value
+        return True
+# --
+# https://stackoverflow.com/questions/65179468/cannot-set-header-data-with-qtableview-custom-table-model
+# --
+class ResultModel(qt_shims.get_QAbstractItemModel()):
+    # container with independent ResultNode elements with the list of their children 
+    # is passed to init()
+    def __init__(self, heads, nodes, env_desc):
+# --
+    def __init__(self, heads, nodes, env_desc):
+        super(ResultModel, self).__init__()
+        self._root = ResultNode(heads)
+        for node in nodes:
+            self._root.addChild(node)
+        # do note that the Model and the Node share a lot of same-named methods
+        # thats it node tree is complete,
+        # because it was semi-done earlier
+# --
+    # so retrieving data is basically
+    # calling macro-data() method
+    # which calls micro-data() methods
+    # ResultNode
+    def data(self, index, role=qt_shims.get_Qt().DisplayRole):
+        if not index.isValid():
+            return None
+        node = index.internalPointer()  # a little magic and we know the node/row
+        if role == qt_shims.get_Qt().DisplayRole:
+            return node.data(index.column())  # now retrieve data column by column
+        # custom
+# --
+    # Node setData proxy method
+    # not sure that it is used (?)
+    def setHeaderData(self, section, orientation, value, role=qt_shims.get_Qt().EditRole):
+# --
+    # Node data proxy method
+    # not sure that it is used (?)
+    def headerData(self, section, orientation, role=qt_shims.get_Qt().DisplayRole):
+# --
+    # this method is important and is fired when some edit
+    # is performed on TreeView widget,
+    # but it seems that it can be called explicitly as well on a model
+    def setData(self, index, value, role=qt_shims.get_Qt().EditRole):
+# --
+    def setData(self, index, value, role=qt_shims.get_Qt().EditRole):
+        if not index.isValid():
+            return False
+        node = index.internalPointer()
+        if role == qt_shims.get_Qt().EditRole:
+            print("data is about to be set", value, node.data(1))
+            # custom
+            col = 1 if value.startswith('/') else 0
+            col = 8 if value.startswith('rgb') else col
+            result = node.setData(col, value)  # index.column()
+            # print(index.column(), result)
+            if result:
+                # self.dataChanged.emit(index, index, [qt_shims.get_Qt().EditRole])
+                # self.dataChanged.emit(self.createIndex(index.row(), col), self.createIndex(index.row(), col), [qt_shims.get_Qt().EditRole])
+                self.dataChanged.emit(index.sibling(index.row(), col), index.sibling(index.row(), col), [qt_shims.get_Qt().EditRole])
+
+            if col == 8:
+                self.dataChanged.emit(index.sibling(index.row(), 0), index.sibling(index.row(), 7), [qt_shims.get_Qt().BackgroundRole])
+            return True
+        return False
+# --
+def find_function(block_start, function_ranges):
+    # Use binary search to find the rightmost (largest) function start address <= address
+    index = bisect.bisect_right(function_ranges, (block_start, block_start))
+
+    # Check if the found index is within the valid range of function_ranges
+    if index > 0 and block_start <= function_ranges[index - 1][1]:
+        return function_ranges[index - 1]
+    return None
+# --
+#------------------------------------------------------------------------------
+# Command Line Testing
+#------------------------------------------------------------------------------
+
+# >python drcov.py drcov.avsscan.exe.00968.0000.proc.log
+if __name__ == "__main__":
+    argc = len(sys.argv)
+    argv = sys.argv
+
+    # base usage
+    if argc < 2:
+        print("usage: {} <coverage filename>".format(os.path.basename(sys.argv[0])))
+        sys.exit()
+
+    # attempt file parse
+    x = DrcovData(argv[1])
+    print(x.modules)
+    # for bb in x.bbs:
+    #     print("0x{:08x}".format(bb.start))
+# --
+                elif any(xref_name.startswith(p) for p in get_lib_prefixes()):
+                    # print(func_name, "<--", xref_name)
+                    prefix = 'lib_implicit'
+                    break
+# --
+            if is_lib(func_addr) or is_func_imp(func_addr) or is_fname_main(func_name):
+                continue
+
+            if func_name == '_WinMain@16':
+                print(func_name, is_fname_main(func_name))
+# --
+    def addItem(self, text, userData=None):
+        item = qt_shims.get_QStandardItem()()
+        item.setText(text)
+        if not userData is None:
+            item.setData(userData)
+        item.setFlags(qt_shims.get_Qt().ItemIsEnabled | qt_shims.get_Qt().ItemIsUserCheckable)
+        item.setData(qt_shims.get_Qt().Unchecked, qt_shims.get_Qt().CheckStateRole)
+        # print('<row_appended>')
+# --
+    def addItemNew(self, text, userData=None):
+        # print('<addItemNew>')
+        for row in range(self.model().rowCount()):
+            item = self.model().item(row)
+            if (item and (item.text() == text)) or (userData and item.data() == userData):
+                # print('RET: ', text, userData)
+                return False # Data already exists, no need to add it again
+        self.addItem(text, userData)
+        return True
+# --
+                if self.mode_merge == 'prefix':
+                    # assumed that prefixes must contain delimiter
+                    func_name_new = plg_utils.add_prefix(func_name, merge_name, False)
+                    func_name_shadow = plg_utils.add_prefix(func_name, merge_name, True)
+                    ida_shims.set_name(func_addr, func_name_new, idaapi.SN_CHECK)
+                    self.ui.ResultsView.model().setData(indexes[idx], func_name_shadow)
+                else:  # folder
+                    print(func_name, merge_name)
+# --
+def get_current_widget():
+    '''
+    '''
+    fn = _get_fn_by_version(idaapi, 'get_current_widget', 'get_current_tform', idaapi)  # ida_kernwin
+# --
+def get_strlit_contents(str_obj):
+    '''
+    Get string contents.
+
+    :param ea: Linear address.
+    :type ea: int
+
+    :return: String contents or empty string.
+    '''
+    fn = _get_fn_by_version(ida_bytes, 'get_strlit_contents', 'GetString', idc)  # idc/idc
+# --
+                func_type_dst.append('vftable')
+            else:
+                func_type_dst.append('unknown')  # call from an unrecognized function
+
+    return func_type_dst  # could be a set, but ratio might be useful
+# --
+
+        func_types_dst = get_func_types_dst(func_addr)
+        func_types_dst = list(set(func_types_dst))  # unique types only
+# --
+# considered as loop?
+def is_func_loop(func_desc):
+# --
+
+# --
+
+# --
+
+# --
