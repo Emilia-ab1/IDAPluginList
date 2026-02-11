@@ -1462,9 +1462,7 @@ def is_fn_std_type(type_name):
         'vprintf',
         'vsprintf',
         'wcstombs',
-        'wctomb',
-        'sizeof',
-        'qmemcpy'
+        'wctomb'
     ]
     return type_name in TYPES    
 
@@ -1499,7 +1497,6 @@ def is_fn_hlp_type(type_name):
         '__halt',
         '__fastfail',
         '__debugbreak',
-        '_CrtDbgReport',
         '__rdtsc',
         '__readeflags',
         '__readfsdword',

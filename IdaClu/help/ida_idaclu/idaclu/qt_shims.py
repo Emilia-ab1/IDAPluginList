@@ -1,1 +1,0 @@
-C:/lab/repos/ida_shims/qt_shims.py
